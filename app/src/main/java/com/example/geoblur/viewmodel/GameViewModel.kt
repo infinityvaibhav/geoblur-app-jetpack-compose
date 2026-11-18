@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import okhttp3.Dispatcher
 import okio.IOException
 
 class GameViewModel: ViewModel() {
@@ -68,6 +67,37 @@ class GameViewModel: ViewModel() {
             Log.e("loadLandmarksFromAssets", "Failed to load landmark", e)
         } catch (e: Exception) {
             Log.e("loadLandmarksFromAssets", "Json parsing error", e)
+        }
+    }
+
+    fun submitAnswer(options: String) {
+        // Get current landmark and if null then exit function
+        val current  = currentLandmark ?: return
+
+        // Is answer correct
+        if (options == current.name) {
+            // Proceed to next question
+            if (_uiState.value.currentIndex < totalLandmarks - 1) {
+                // Move to the next question by updating the uiState
+                _uiState.update {
+                    it.copy(
+                        currentIndex =  it.currentIndex + 1,
+                        blurRadius = initialBlurRadius
+                    )
+                }
+            } else {
+                // It is the last question so show dialog
+                _uiState.update { it.copy(showDialog = true) }
+            }
+        } else {
+            val newBlur = (_uiState.value.blurRadius - initialBlurRadius / numberOfTries)
+                .coerceAtLeast(0f)
+            _uiState.update {
+                it.copy(
+                    blurRadius = newBlur,
+                    showDialog = newBlur == 0f
+                )
+            }
         }
     }
 }
