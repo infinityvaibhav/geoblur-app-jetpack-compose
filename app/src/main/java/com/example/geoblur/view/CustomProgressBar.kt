@@ -1,6 +1,5 @@
-package com.example.geoblur
+package com.example.geoblur.view
 
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -46,13 +44,11 @@ fun CustomProgressBarView(
             .background(backgroundColor)
     ) {
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth(animatedProgress)
-                .height(20.dp)
-                .clip(RoundedCornerShape(10.dp))
                 .background(foregroundColor)
-        ) { }
+        )
     }
 }
 
