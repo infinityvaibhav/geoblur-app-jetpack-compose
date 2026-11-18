@@ -56,14 +56,10 @@ class MainActivity : ComponentActivity() {
 fun GeoBlurView(modifier: Modifier = Modifier, viewModel: GameViewModel) {
     val uiState by viewModel.uiState.collectAsState()
 
-    val isLoading = false
-    var currentIndex by remember { mutableIntStateOf(0) }
-    val totalLandmark = 10
-
     Scaffold(
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
-        if (isLoading) {
+        if (uiState.loading) {
             Box(
                 modifier = modifier
                     .fillMaxSize()
@@ -73,63 +69,10 @@ fun GeoBlurView(modifier: Modifier = Modifier, viewModel: GameViewModel) {
                 CircularProgressIndicator()
             }
         } else {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                CustomProgressBarView(
-                    progress = currentIndex.toFloat() / totalLandmark
-                )
-                Text("$currentIndex")
-                Text(
-                    text = "Guess the landmark!",
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        letterSpacing = 1.5.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = modifier.padding(16.dp)
-                )
-
-                // Middle Section - Image box
-                Box(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(Color.Red),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Image goes here")
-                }
-
-                // Bottom Section - Buttons
-                Column {
-                    val options = listOf(
-                        "Acropolis",
-                        "Parthenon",
-                        "Pantheon",
-                        "Colosseum"
-                    )
-
-                    options.forEach { option ->
-                        Button(
-                            onClick = {
-                                currentIndex += 1
-                            },
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp)
-                        ) {
-                            Text(option)
-                        }
-                    }
-                }
-            }
+            GeoBlurContentScreen(
+                viewModel = viewModel,
+                innerPadding = innerPadding
+            )
         }
     }
 }
