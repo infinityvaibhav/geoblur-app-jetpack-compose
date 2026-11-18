@@ -23,7 +23,8 @@ class GameViewModel: ViewModel() {
     )
     val uiState = _uiState.asStateFlow()
 
-    private val totalLandmarks: Int = _uiState.value.shuffledLandmark.size
+    private val totalLandmarks: Int
+        get() = _uiState.value.shuffledLandmark.size
 
     val currentLandmark: Landmark?
         get() {
@@ -45,7 +46,7 @@ class GameViewModel: ViewModel() {
         get() {
             val state = _uiState.value
             val total = totalLandmarks.coerceAtLeast(1)
-            return  if (state.showDialog) 1f else state.currentIndex.toFloat() / total
+            return if (state.showDialog && playerWon) 1f else state.currentIndex.toFloat() / total
         }
 
     private  val json = Json {

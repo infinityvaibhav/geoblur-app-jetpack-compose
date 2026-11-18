@@ -1,6 +1,6 @@
 package com.example.geoblur.view
 
-import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -31,8 +31,8 @@ fun CustomProgressBarView(
         targetValue = progress
             .coerceIn(0f, 1f),
         animationSpec = tween(
-            durationMillis = 800,
-            easing = LinearOutSlowInEasing
+            durationMillis = 1000,
+            easing = LinearEasing
         ),
         label = "ProgressAnimation"
     )
