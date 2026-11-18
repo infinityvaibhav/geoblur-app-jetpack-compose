@@ -15,15 +15,15 @@ import kotlinx.serialization.json.Json
 import okio.IOException
 
 class GameViewModel: ViewModel() {
-    val initialBlurRadius: Float = 20f
-    val numberOfTries = 2
+    private val initialBlurRadius: Float = 20f
+    private val numberOfTries = 2
 
     private val _uiState = MutableStateFlow(
         GameUiState(blurRadius = initialBlurRadius)
     )
     val uiState = _uiState.asStateFlow()
 
-    val totalLandmarks: Int = _uiState.value.shuffledLandmark.size
+    private val totalLandmarks: Int = _uiState.value.shuffledLandmark.size
 
     val currentLandmark: Landmark?
         get() {
@@ -33,6 +33,19 @@ class GameViewModel: ViewModel() {
             Log.d("currentLandmark", "currentLandmark = $index, shuffledLandmark.size = ${list.size}")
             // safety check = valid index and list should not be empty
             return  if(list.isNotEmpty() && index in list.indices) list[index] else null
+        }
+
+    val playerWon: Boolean
+        get() {
+            val state = _uiState.value
+            return state.currentIndex == state.shuffledLandmark.size - 1 && state.blurRadius > 0f
+        }
+
+    val progress: Float
+        get() {
+            val state = _uiState.value
+            val total = totalLandmarks.coerceAtLeast(1)
+            return  if (state.showDialog) 1f else state.currentIndex.toFloat() / total
         }
 
     private  val json = Json {
