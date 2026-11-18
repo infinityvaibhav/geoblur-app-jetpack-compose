@@ -100,4 +100,15 @@ class GameViewModel: ViewModel() {
             }
         }
     }
+
+    fun restartGame() {
+        _uiState.update {
+            it.copy(
+                currentIndex = 0,
+                blurRadius = initialBlurRadius,
+                showDialog = false,
+                shuffledLandmark = it.shuffledLandmark.shuffled()
+            )
+        }
+    }
 }
